@@ -18,7 +18,9 @@ app.use(express.urlencoded({extended:false}));
 
 
 
-
+app.get("/",(req,res)=>{
+    res.send("hello world");
+})
 
 
 
