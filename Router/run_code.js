@@ -20,13 +20,15 @@ sqlqueryhandler = (sql) =>{
 
 
 
-const runcode=(filepath,inputpath,req,res)=>{
-   const command=inputpath?`javac ${filepath} && java ${filepath} < ${inputpath}`:`javac ${filepath} && java ${filepath}`
+const runcode=(dir,input,req,res)=>{
+  const filepath="Solution"
+  const inputpath="input.txt"
+   const command=input?` cd ${dir} &&  javac ${filepath}.java && java ${filepath} < ${inputpath}`:` cd ${dir} && javac ${filepath} && java ${filepath}`
      exec(command,{timeout:5000},(err, stdout, stderr) => {  
         if (err) {  
           
-       
-          res.json({val:"Time limit Exceed"});  
+         console.log(err)
+          res.json({val:"err"});  
         }
         else if(stdout){
           res.json ({val:stdout})
@@ -42,7 +44,7 @@ const runcode=(filepath,inputpath,req,res)=>{
             throw err;
         }
     
-        console.log(`${dir} is deleted!`);
+       
     });
 
       });  
@@ -73,11 +75,11 @@ router.post("/",(req,res)=>{
           fs.writeFile(`${dir}/input.txt`,input,async function(err1){
             if(err1) throw err1;
 
-            await runcode(`${dir}/Solution.java`,`${dir}/input.txt`,req,res)
+            await runcode(dir,true,req,res)
           })
         }
         else{
-          await runcode(`${dir}/Solution.java`,undefined,req,res)
+          await runcode(dir,false,req,res)
         }
          
         
